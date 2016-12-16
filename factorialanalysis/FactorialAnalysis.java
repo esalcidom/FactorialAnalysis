@@ -21,13 +21,12 @@ public class FactorialAnalysis {
     public static void main(String[] args) {
         String path = "C:\\Users\\Emmanuel\\Documents\\Maestria\\CSVSamples\\covsample.csv";
         CvsReader reader = new CvsReader(path);
-        int[] colIndex = {0,1};
+        int[] colIndex = {0,1,2};
         double[][] data = reader.getDataAt(colIndex);
         
-        
-        Covariance cov = new Covariance(Matrix.getAllColumnAt(data,0),Matrix.getAllColumnAt(data,1));
-        cov.calCovariance();
-        System.out.println(cov.getCovariance());
+        Determinant determin = new Determinant(data);
+        determin.calDeterminant();
+        System.out.println(determin.getDeterminant());
         
     }
     

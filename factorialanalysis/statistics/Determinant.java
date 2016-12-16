@@ -24,14 +24,17 @@ public class Determinant {
     
     public Determinant(double[][] matrix){
         this.matrix = matrix;
+        this.matrixSize = this.matrix.length;
     }
     
     public void calDeterminant(){
         //Gauss elimination
+        double determinantCal = 1;
         for(int col=0;col<matrixSize;col++){
-            
+            determinantCal *= gaussianEliminationPivot(col);
         }
-        
+        determinantCal *= matrix[matrixSize-1][matrixSize-1];
+        this.determinant = determinantCal;
     }
     
     private double gaussianEliminationPivot(int rowColPivot){
@@ -39,7 +42,6 @@ public class Determinant {
         if(divisionValue>1){
             this.matrix[rowColPivot][rowColPivot] = 1;
         }
-        
         for(int row=rowColPivot+1;row<matrixSize;row++){
             double rowElement = this.matrix[row][rowColPivot] * -1;
             for(int colAlter=rowColPivot;colAlter<matrixSize;colAlter++){

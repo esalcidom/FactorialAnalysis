@@ -15,6 +15,8 @@ public class Determinant {
     
     private double determinant;
     private double[][] matrix;
+    private double[][] subMatrix;
+    int start, last;
     private int matrixSize;
     
     public Determinant(MCorrelation matrix){
@@ -28,30 +30,44 @@ public class Determinant {
     }
     
     public void calDeterminant(){
-        //Gauss elimination
-        double determinantCal = 1;
-        for(int col=0;col<matrixSize;col++){
-            determinantCal *= gaussianEliminationPivot(col);
-        }
-        determinantCal *= matrix[matrixSize-1][matrixSize-1];
-        this.determinant = determinantCal;
+        //Dodgson condensation
+        this.determinant = dodgsonDeterminant(this.matrix, matrixSize);
     }
     
-    private double gaussianEliminationPivot(int rowColPivot){
-        double divisionValue = this.matrix[rowColPivot][rowColPivot];
-        if(divisionValue>1){
-            this.matrix[rowColPivot][rowColPivot] = 1;
+    public double dodgsonDeterminant(double[][] matrix, int size){
+        double det;
+        if(size == 1){
+            det = matrix[0][0];
         }
-        for(int row=rowColPivot+1;row<matrixSize;row++){
-            double rowElement = this.matrix[row][rowColPivot] * -1;
-            for(int colAlter=rowColPivot;colAlter<matrixSize;colAlter++){
-                double elementPivotRow = this.matrix[rowColPivot][colAlter];
-                double elementSwitchRow = this.matrix[row][colAlter];
-                double valueSwitch = rowElement * elementPivotRow + elementSwitchRow;
-                this.matrix[row][colAlter] = valueSwitch;
+        else if(size == 2){
+            det = matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1];
+        }
+        else{
+            det = 0;
+            for(int i=0;i<size;i++){
+                subMatrix = generateSubMatrix(matrix, size, i);
+                det += Math.pow(-1.0, 1.0+i+1.0) * matrix[0][1] * dodgsonDeterminant(subMatrix, size-1);
             }
         }
-        return divisionValue;
+        return det;
+    }
+    
+    private double[][] generateSubMatrix(double matrix[][], int size, int i){
+        subMatrix = new double[size-1][];
+        for(int k=0;k<(size-1);k++){
+            subMatrix[k] = new double[size-1];
+        }
+        for(int z=1;z<size;z++){
+            int p=0;
+            for(int j=0;j<size;j++){
+                if(j == i){
+                    continue;
+                }
+                subMatrix[z-1][p] = matrix[z][j];
+                p++;
+            }
+        }
+        return subMatrix;
     }
     
     public double getDeterminant(){

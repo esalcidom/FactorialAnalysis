@@ -46,7 +46,7 @@ public class Determinant {
             det = 0;
             for(int i=0;i<size;i++){
                 subMatrix = generateSubMatrix(matrix, size, i);
-                det += Math.pow(-1.0, 1.0+i+1.0) * matrix[0][1] * dodgsonDeterminant(subMatrix, size-1);
+                det += Math.pow(-1.0, 1.0+i+1.0) * matrix[0][i] * dodgsonDeterminant(subMatrix, size-1);
             }
         }
         return det;
